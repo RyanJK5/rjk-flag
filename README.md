@@ -35,25 +35,20 @@ inline constexpr struct{} serializable{};
 
 But, similarly to `explicit` or `noexcept`, it may be desirable for users to toggle whether or not an entity "opts-in" to a flag based on surrounding context.
 
-For example, the alternative spelling for the example above would require a template specialization:
+An alternative spelling for the example above would require some noticeable verbosity:
 
 ```c++
 inline constexpr struct{} serializable{};
-inline constexpr struct{} skip_field{};
+
+struct SkipField{};
+inline constexpr SkipField skip_field{};
 
 template <typename T>
-struct [[ =serializable ]] MyType {
-    int x;
-    int y;
-    T data;
-};
-
-template <typename T> requires std::is_pointer_v<T>
 struct [[ =serializable ]] MyType<T> {
     int x;
     int y;
 
-    [[ =skip_field ]]
+    [[ =std::conditional_t<std::is_pointer_v<T>, SkipField, std::monostate>{} ]]
     T data;
 };
 ```
