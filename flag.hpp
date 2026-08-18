@@ -1,26 +1,27 @@
-#include <meta>
-
 namespace rjk {
 
-template <typename Tag = decltype([] {}), bool On = true>
+template <typename Tag = decltype([] {})>
 struct flag {
-    consteval std::meta::info operator()(bool b) const {
-        return substitute(^^rjk::flag, {^^Tag, std::meta::reflect_constant(b)});
+    bool on = true;
+
+    consteval flag operator()(bool b) const {
+        return flag{.on = b};
     }
 };
 
 template <typename T>
 concept flag_type = (has_template_arguments(^^T) && template_of(^^T) == ^^flag);
 
-consteval bool is_flag_set(std::meta::info entity, flag_type auto flag) {
+consteval bool is_flag_set(std::meta::info entity, flag_type auto f) {
     for (const auto annotation : annotations_of(entity)) {
-        if (type_of(annotation) == dealias(^^std::meta::info)) {
-            if (extract<std::meta::info>(annotation) == type_of(^^flag)) {
-                return true;
-            }
-        } else if (decay(type_of(annotation)) == type_of(^^flag)) {
-            return true;
+        if (decay(type_of(annotation)) != type_of(^^f)) {
+            continue;
         }
+
+        const bool valid = extract<decltype(f)>(annotation).on;
+        if (valid) {
+            return true;
+        }    
     }
     return false;
 }
