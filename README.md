@@ -65,7 +65,7 @@ Alongside additional boilerplate code for checking whether or not the annotation
 ```c++
 template <typename Tag = decltype([] {}), bool On = true>
 struct flag {
-    consteval std::meta::info operator()(bool b) const requires On;
+    consteval std::meta::info operator()(bool b) const;
 };
 
 template <typename T>
