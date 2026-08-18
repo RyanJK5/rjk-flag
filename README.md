@@ -67,7 +67,8 @@ struct flag {
 template <typename T>
 concept flag_type = (has_template_arguments(^^T) && template_of(^^T) == ^^flag);
 
-consteval bool is_flag_set(std::meta::info entity, flag_type auto f);
+template <flag_type Flag>
+consteval bool is_flag_set(std::meta::info entity, Flag);
 ```
 
 The template argument `Tag` ensures `flag` is unique in each instantiation. It is ill-advised to explicitly provide `Tag`.
@@ -76,8 +77,8 @@ The template argument `Tag` ensures `flag` is unique in each instantiation. It i
 
 `flag_type<T>` is a concept that checks if `T` is an template specialization of `flag`.
 
-`is_flag_set` queries whether an entity that can hold an annotation has the provided flag `f`. Formally, for each annotation on `entity`, it will check if the annotation
-is an expression of type `decltype(f)` and has `on = true`.
+`is_flag_set` queries whether an entity that can hold an annotation has the provided `Flag`. Formally, for each annotation on `entity`, it will check if the annotation
+is an expression of type `Flag` and has `on = true`.
 
 ## License
 
