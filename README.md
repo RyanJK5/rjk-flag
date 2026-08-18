@@ -81,7 +81,7 @@ The template arguments on `flag` are defaulted to allow simple `rjk::flag` decla
 `flag_type<T>` is a concept that checks if `T` is an template specialization of `flag`.
 
 `is_flag_set` queries whether an entity that can hold an annotation has the provided flag `f`. Formally, for each annotation on `entity`, it will check if the annotation
-is either an expression of type `type_of(f)` or is a reflection of type `std::meta::info` equal to `type_of(f)`.
+is either an expression of type `type_of(f)`, or an expression of type `std::meta::info` equal to `type_of(f)`.
 
 ## License
 
