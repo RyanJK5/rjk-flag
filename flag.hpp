@@ -1,3 +1,5 @@
+#include <meta>
+
 namespace rjk {
 
 template <typename Tag = decltype([] {})>
