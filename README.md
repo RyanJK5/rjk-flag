@@ -2,6 +2,8 @@
 
 Compile-time boolean annotations for for C++26 reflection, analogous to `explicit(bool)` or `noexcept(bool)`.
 
+Try it on [Compiler Explorer](https://godbolt.org/z/cx9nTsrKh)!
+
 ```c++
 inline constexpr rjk::flag serializable{};
 inline constexpr rjk::flag skip_field{};
@@ -16,7 +18,7 @@ struct [[ =serializable ]] MyType {
 };
 
 // serializable is applied unconditionally
-static_assert(rjk::is_flag_set(^^MyType, serializable));
+static_assert(rjk::is_flag_set(^^MyType<int>, serializable));
 
 // skip_field is applied conditionally
 static_assert(not rjk::is_flag_set(^^MyType<int>::data, skip_field));
@@ -31,7 +33,7 @@ static_assert(rjk::is_flag_set(^^MyType<int*>::data, skip_field));
 inline constexpr struct{} serializable{};
 ```
 
-But, similarly `explicit` or `noexcept`, it may be desirable for users to toggle whether or not an entity "opts-in" to a flag based on surrounding context.
+But, similarly to `explicit` or `noexcept`, it may be desirable for users to toggle whether or not an entity "opts-in" to a flag based on surrounding context.
 
 For example, the alternative spelling for the example above would require a template specialization:
 
