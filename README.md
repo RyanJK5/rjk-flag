@@ -58,9 +58,10 @@ Alongside additional boilerplate code for checking whether or not the annotation
 ## API
 
 ```c++
-template <typename Tag = decltype([] {}), bool On = true>
+template <typename Tag = decltype([] {})>
 struct flag {
-    consteval std::meta::info operator()(bool b) const;
+    bool on = true;
+    consteval flag operator()(bool b) const;
 };
 
 template <typename T>
@@ -69,14 +70,14 @@ concept flag_type = (has_template_arguments(^^T) && template_of(^^T) == ^^flag);
 consteval bool is_flag_set(std::meta::info entity, flag_type auto f);
 ```
 
-The template arguments on `flag` are defaulted to allow simple `rjk::flag` declaration syntax. It is ill-advised to explicitly provide template arguments to `flag`.
+The template argument `Tag` ensures `flag` is unique in each instantiation. It is ill-advised to explicitly provide `Tag`.
 
-`flag<Tag>::operator()` accepts a boolean `b` and returns a reflection of `flag<Tag, b>`.
+`flag<Tag>::operator()` accepts a boolean `b` and returns a `flag<Tag>` where `on = b`.
 
 `flag_type<T>` is a concept that checks if `T` is an template specialization of `flag`.
 
 `is_flag_set` queries whether an entity that can hold an annotation has the provided flag `f`. Formally, for each annotation on `entity`, it will check if the annotation
-is either an expression of type `type_of(f)`, or an expression of type `std::meta::info` equal to `type_of(f)`.
+is an expression of type `decltype(f)` and has `on = true`.
 
 ## License
 
