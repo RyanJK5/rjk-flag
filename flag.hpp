@@ -4,7 +4,7 @@ namespace rjk {
 
 template <typename Tag = decltype([] {}), bool On = true>
 struct flag {
-    consteval std::meta::info operator()(bool b) const requires On {
+    consteval std::meta::info operator()(bool b) const {
         return substitute(^^rjk::flag, {^^Tag, std::meta::reflect_constant(b)});
     }
 };
