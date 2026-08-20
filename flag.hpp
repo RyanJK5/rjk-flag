@@ -1,3 +1,6 @@
+#ifndef RJK_FLAG_HPP
+#define RJK_FLAG_HPP
+
 #include <meta>
 
 namespace rjk {
@@ -30,3 +33,5 @@ consteval bool is_flag_set(std::meta::info entity, Flag) {
 }
 
 }  // namespace rjk
+
+#endif
